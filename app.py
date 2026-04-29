@@ -6,7 +6,7 @@ import os
 # 1. CONFIGURAÇÕES DA PÁGINA
 st.set_page_config(page_title="Gerador Fireng", page_icon="🔥", layout="centered")
 
-# CSS para o botão laranja igual ao da Fireng
+# Customização do botão para o padrão laranja Fireng
 st.markdown("""
     <style>
     .stButton>button {
@@ -38,6 +38,10 @@ SITE_FIXO = "www.fireng.com.br"
 TEMPLATE_PATH = "template_limpo.png" 
 FONT_DIR = "fontes"
 
+# --- AJUSTE FINO DE ALINHAMENTO (ÍCONE vs TEXTO) ---
+# Se o texto ainda parecer desalinhado, altere este número (ex: 2, 4, 6 ou -2)
+ADJUST_Y_TEXT = 4 
+
 st.title("🔥 Gerador de Assinaturas")
 st.subheader("Dados da Assinatura")
 
@@ -50,7 +54,7 @@ with col_tel:
 with col_mail:
     email = st.text_input("E-mail Corporativo:")
 
-# 3. LÓGICA DE GERAÇÃO (IDÊNTICA AO SEU EXE)
+# 3. LÓGICA DE GERAÇÃO
 if st.button("GERAR ASSINATURA"):
     if nome and cargo and email:
         try:
@@ -68,7 +72,7 @@ if st.button("GERAR ASSINATURA"):
             cor_nome = (26, 26, 26, 255)     
             cor_cargo = (102, 102, 102, 255) 
 
-            # Desenha Nome, Cargo e Linha
+            # Desenha Nome, Cargo e Linha Horizontal
             draw.text((COORDENADA_X, Y_NOME), nome, font=font_n, fill=cor_nome)
             draw.text((COORDENADA_X, Y_CARGO), cargo, font=font_d, fill=cor_cargo)
             draw.line((COORDENADA_X, Y_LINHA_HORIZONTAL, COORDENADA_X + LARGURA_LINHA, Y_LINHA_HORIZONTAL), fill=cor_cargo, width=3)
@@ -85,13 +89,15 @@ if st.button("GERAR ASSINATURA"):
                 if os.path.exists(icon_path):
                     icon_img = Image.open(icon_path).convert("RGBA")
                     icon_img = icon_img.resize(TAMANHO_ICON, Image.Resampling.LANCZOS)
+                    # Cola o ícone na posição Y padrão
                     img.paste(icon_img, (COORDENADA_X, y), icon_img)
                 
-                draw.text((COORDENADA_X + RECUO_TEXTO, y), texto, font=font_d, fill=cor_nome)
+                # Desenha o texto com o ajuste vertical para centralizar com o ícone
+                draw.text((COORDENADA_X + RECUO_TEXTO, y + ADJUST_Y_TEXT), texto, font=font_d, fill=cor_nome)
 
             # Exibição no Streamlit
             st.markdown("---")
-            st.image(img, caption="Prévia da Assinatura", use_column_width=True)
+            st.image(img, caption="Prévia da Assinatura - Verifique o alinhamento", use_column_width=True)
             
             # Preparar Download
             buf = io.BytesIO()

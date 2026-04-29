@@ -55,7 +55,7 @@ with col_mail:
     email = st.text_input("E-mail Corporativo:")
 
 # 3. LÓGICA DE GERAÇÃO
-if st.button("GERAR ASSINATURA"):
+if st.button("GERAR"):
     if nome and cargo and email:
         try:
             # Carrega Template
@@ -97,13 +97,13 @@ if st.button("GERAR ASSINATURA"):
 
             # Exibição no Streamlit
             st.markdown("---")
-            st.image(img, caption="PRÉVIA DA ASSINATURA", use_column_width=True)
+            st.image(img, caption="PRÉVIA", use_column_width=True)
             
             # Preparar Download
             buf = io.BytesIO()
             img.save(buf, format="PNG")
             st.download_button(
-                label="💾 BAIXAR ASSINATURA",
+                label="💾 BAIXAR",
                 data=buf.getvalue(),
                 file_name=f"Assinatura_{nome.replace(' ', '_')}.png",
                 mime="image/png"

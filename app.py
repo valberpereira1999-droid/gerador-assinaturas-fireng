@@ -6,78 +6,107 @@ import os
 # 1. CONFIGURAÇÕES DA PÁGINA
 st.set_page_config(page_title="Gerador Fireng", page_icon="🔥", layout="centered")
 
+# CSS para o botão laranja igual ao da Fireng
 st.markdown("""
     <style>
     .stButton>button {
         width: 100%;
-        background-color: #FF4B2B;
+        background-color: #F37021;
         color: white;
         font-weight: bold;
         border-radius: 5px;
         border: none;
         height: 3em;
     }
-    .stButton>button:hover { background-color: #E63E1C; color: white; }
+    .stButton>button:hover { background-color: #D65A10; color: white; }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🔥 Gerador de Assinaturas")
-st.subheader("Preencha os dados abaixo:")
-
-# 2. FORMULÁRIO
-nome = st.text_input("Nome e Sobrenome:")
-setor = st.text_input("Setor:")
-col_tel, col_mail = st.columns(2)
-with col_tel:
-    telefone = st.text_input("Telefone:", placeholder="(71) 98183-5539")
-with col_mail:
-    email = st.text_input("E-mail Corporativo:", placeholder="vendas@fireng.com.br")
-
+# --- CONFIGURAÇÕES DE LAYOUT (ORIGINAIS DO SEU EXE) ---
+TAMANHO_NOME = 65           
+TAMANHO_DADOS = 38          
+TAMANHO_ICON = (38, 38)     
+COORDENADA_X = 885          
+Y_NOME = 65                 
+Y_CARGO = 145               
+Y_LINHA_HORIZONTAL = 200    
+Y_CONTATOS_INICIAL = 250    
+ESPACAMENTO_LINHAS = 65     
+LARGURA_LINHA = 500        
+RECUO_TEXTO = 55            
 SITE_FIXO = "www.fireng.com.br"
 TEMPLATE_PATH = "template_limpo.png" 
 FONT_DIR = "fontes"
 
-# 3. LÓGICA DE GERAÇÃO
-if st.button("GERAR MINHA ASSINATURA"):
-    if nome and setor and telefone and email:
+st.title("🔥 Gerador de Assinaturas")
+st.subheader("Dados da Assinatura")
+
+# 2. CAMPOS DE ENTRADA
+nome = st.text_input("Nome Completo:")
+cargo = st.text_input("Cargo/Setor:")
+col_tel, col_mail = st.columns(2)
+with col_tel:
+    telefone = st.text_input("Telefone:", value="(71) 3026-0721")
+with col_mail:
+    email = st.text_input("E-mail Corporativo:")
+
+# 3. LÓGICA DE GERAÇÃO (IDÊNTICA AO SEU EXE)
+if st.button("GERAR ASSINATURA"):
+    if nome and cargo and email:
         try:
-            img = Image.open(TEMPLATE_PATH)
+            # Carrega Template
+            img = Image.open(TEMPLATE_PATH).convert("RGBA")
             draw = ImageDraw.Draw(img)
             
+            # Fontes
             f_bold = os.path.join(FONT_DIR, "GoogleSans-Bold.ttf")
             f_reg = os.path.join(FONT_DIR, "GoogleSans-Regular.ttf")
-            
-            font_nome = ImageFont.truetype(f_bold, 35)
-            font_info = ImageFont.truetype(f_reg, 20)
-            
-            # --- AJUSTE FINAL DE POSIÇÃO ---
-            x_pos = 450 # Texto bem à direita para fugir da logo
-            y_start = 65 
-            y_offset = 35 
-            
-            # Desenha o Nome
-            draw.text((x_pos, y_start), nome.upper(), font=font_nome, fill=(30, 30, 30))
-            
-            # Desenha as demais informações
-            current_y = y_start + 50
-            infos = [setor, f"Fone: {telefone}", f"E-mail: {email}", f"Site: {SITE_FIXO}"]
-            
-            for info in infos:
-                draw.text((x_pos, current_y), info, font=font_info, fill=(80, 80, 80))
-                current_y += y_offset
-            
+            font_n = ImageFont.truetype(f_bold, TAMANHO_NOME)
+            font_d = ImageFont.truetype(f_reg, TAMANHO_DADOS)
+
+            # Cores originais
+            cor_nome = (26, 26, 26, 255)     
+            cor_cargo = (102, 102, 102, 255) 
+
+            # Desenha Nome, Cargo e Linha
+            draw.text((COORDENADA_X, Y_NOME), nome, font=font_n, fill=cor_nome)
+            draw.text((COORDENADA_X, Y_CARGO), cargo, font=font_d, fill=cor_cargo)
+            draw.line((COORDENADA_X, Y_LINHA_HORIZONTAL, COORDENADA_X + LARGURA_LINHA, Y_LINHA_HORIZONTAL), fill=cor_cargo, width=3)
+
+            # Ícones e Contatos
+            icons_info = [
+                ('tel', telefone, Y_CONTATOS_INICIAL, 'telefone.png'),
+                ('email', email, Y_CONTATOS_INICIAL + ESPACAMENTO_LINHAS, 'cartinha.png'),
+                ('site', SITE_FIXO, Y_CONTATOS_INICIAL + (ESPACAMENTO_LINHAS * 2), 'mundo.png')
+            ]
+
+            for key, texto, y, icon_name in icons_info:
+                icon_path = os.path.join(FONT_DIR, icon_name)
+                if os.path.exists(icon_path):
+                    icon_img = Image.open(icon_path).convert("RGBA")
+                    icon_img = icon_img.resize(TAMANHO_ICON, Image.Resampling.LANCZOS)
+                    img.paste(icon_img, (COORDENADA_X, y), icon_img)
+                
+                draw.text((COORDENADA_X + RECUO_TEXTO, y), texto, font=font_d, fill=cor_nome)
+
+            # Exibição no Streamlit
             st.markdown("---")
-            st.image(img, caption="Assinatura Gerada", use_column_width=True)
+            st.image(img, caption="Prévia da Assinatura", use_column_width=True)
             
+            # Preparar Download
             buf = io.BytesIO()
             img.save(buf, format="PNG")
             st.download_button(
-                label="💾 BAIXAR ASSINATURA",
+                label="💾 BAIXAR ASSINATURA AGORA",
                 data=buf.getvalue(),
                 file_name=f"Assinatura_{nome.replace(' ', '_')}.png",
                 mime="image/png"
             )
+            
         except Exception as e:
-            st.error(f"Erro técnico: {e}")
+            st.error(f"Erro ao gerar: {e}")
     else:
-        st.warning("Preencha todos os campos.")
+        st.warning("⚠️ Preencha Nome, Cargo e E-mail.")
+
+st.markdown("---")
+st.caption("© 2026 Fireng Engenharia")

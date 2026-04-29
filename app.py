@@ -40,7 +40,7 @@ FONT_DIR = "fontes"
 
 # --- AJUSTE FINO DE ALINHAMENTO (ÍCONE vs TEXTO) ---
 # Se o texto ainda parecer desalinhado, altere este número (ex: 2, 4, 6 ou -2)
-ADJUST_Y_TEXT = 6
+ADJUST_Y_TEXT = 100
 
 st.title("🔥 Gerador de Assinaturas")
 st.subheader("Dados da Assinatura")

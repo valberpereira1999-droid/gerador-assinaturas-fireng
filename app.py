@@ -103,7 +103,7 @@ if st.button("GERAR"):
             buf = io.BytesIO()
             img.save(buf, format="PNG")
             st.download_button(
-                label="💾 BAIXAR",
+                label="💾 BAIXAR ASSINATURA",
                 data=buf.getvalue(),
                 file_name=f"Assinatura_{nome.replace(' ', '_')}.png",
                 mime="image/png"

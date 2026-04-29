@@ -53,7 +53,7 @@ SITE_FIXO = "www.fireng.com.br"
 
 # 4. CONFIGURAÇÃO DE ARQUIVOS
 FONT_DIR = "fontes"
-TEMPLATE_PATH = "template_limpo.jpg"
+TEMPLATE_PATH = "template_limpo.png"
 
 if st.button("GERAR MINHA ASSINATURA"):
     if nome and setor and telefone and email:

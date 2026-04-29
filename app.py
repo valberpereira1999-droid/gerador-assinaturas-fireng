@@ -46,7 +46,7 @@ st.title("🔥 Gerador de Assinaturas")
 st.subheader("Dados da Assinatura")
 
 # 2. CAMPOS DE ENTRADA
-nome = st.text_input("Nome Completo:")
+nome = st.text_input("Nome e Sobrenome:")
 cargo = st.text_input("Cargo/Setor:")
 col_tel, col_mail = st.columns(2)
 with col_tel:

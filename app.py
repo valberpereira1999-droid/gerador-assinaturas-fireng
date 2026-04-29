@@ -97,7 +97,7 @@ if st.button("GERAR ASSINATURA"):
 
             # Exibição no Streamlit
             st.markdown("---")
-            st.image(img, caption="Prévia da Assinatura - Verifique o alinhamento", use_column_width=True)
+            st.image(img, caption="Prévia da Assinatura", use_column_width=True)
             
             # Preparar Download
             buf = io.BytesIO()
@@ -115,4 +115,4 @@ if st.button("GERAR ASSINATURA"):
         st.warning("⚠️ Preencha Nome, Cargo e E-mail.")
 
 st.markdown("---")
-st.caption("© 2026 Fireng Engenharia")
+st.caption("© 2026 Fireng Engenharia de Incêndio")

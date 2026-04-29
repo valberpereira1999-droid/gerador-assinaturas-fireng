@@ -1,3 +1,43 @@
+import streamlit as st
+from PIL import Image, ImageDraw, ImageFont
+import io
+import os
+
+# 1. CONFIGURAÇÕES DA PÁGINA
+st.set_page_config(page_title="Gerador Fireng", page_icon="🔥", layout="centered")
+
+st.markdown("""
+    <style>
+    .stButton>button {
+        width: 100%;
+        background-color: #FF4B2B;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        height: 3em;
+    }
+    .stButton>button:hover { background-color: #E63E1C; color: white; }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("🔥 Gerador de Assinaturas")
+st.subheader("Preencha os dados abaixo:")
+
+# 2. FORMULÁRIO
+nome = st.text_input("Nome e Sobrenome:")
+setor = st.text_input("Setor:")
+col_tel, col_mail = st.columns(2)
+with col_tel:
+    telefone = st.text_input("Telefone:", placeholder="(71) 98183-5539")
+with col_mail:
+    email = st.text_input("E-mail Corporativo:", placeholder="vendas@fireng.com.br")
+
+SITE_FIXO = "www.fireng.com.br"
+TEMPLATE_PATH = "template_limpo.png" 
+FONT_DIR = "fontes"
+
+# 3. LÓGICA DE GERAÇÃO
 if st.button("GERAR MINHA ASSINATURA"):
     if nome and setor and telefone and email:
         try:
@@ -7,19 +47,18 @@ if st.button("GERAR MINHA ASSINATURA"):
             f_bold = os.path.join(FONT_DIR, "GoogleSans-Bold.ttf")
             f_reg = os.path.join(FONT_DIR, "GoogleSans-Regular.ttf")
             
-            # Fontes levemente maiores para aproveitar o espaço branco
             font_nome = ImageFont.truetype(f_bold, 35)
             font_info = ImageFont.truetype(f_reg, 20)
             
-            # --- AJUSTE DE MIRA (X e Y) ---
-            x_pos = 420 # Posição horizontal (mais para a direita)
-            y_start = 65 # Posição vertical (mais para cima)
-            y_offset = 35 # Espaço entre as linhas
+            # --- AJUSTE FINAL DE POSIÇÃO ---
+            x_pos = 450 # Texto bem à direita para fugir da logo
+            y_start = 65 
+            y_offset = 35 
             
-            # Nome
+            # Desenha o Nome
             draw.text((x_pos, y_start), nome.upper(), font=font_nome, fill=(30, 30, 30))
             
-            # Linhas de informação
+            # Desenha as demais informações
             current_y = y_start + 50
             infos = [setor, f"Fone: {telefone}", f"E-mail: {email}", f"Site: {SITE_FIXO}"]
             
@@ -28,7 +67,7 @@ if st.button("GERAR MINHA ASSINATURA"):
                 current_y += y_offset
             
             st.markdown("---")
-            st.image(img, caption="Verifique agora se o texto saiu da frente da logo!", use_column_width=True)
+            st.image(img, caption="Assinatura Gerada", use_column_width=True)
             
             buf = io.BytesIO()
             img.save(buf, format="PNG")
@@ -39,4 +78,6 @@ if st.button("GERAR MINHA ASSINATURA"):
                 mime="image/png"
             )
         except Exception as e:
-            st.error(f"Erro: {e}")
+            st.error(f"Erro técnico: {e}")
+    else:
+        st.warning("Preencha todos os campos.")

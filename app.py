@@ -97,13 +97,13 @@ if st.button("GERAR ASSINATURA"):
 
             # Exibição no Streamlit
             st.markdown("---")
-            st.image(img, caption="Prévia da Assinatura", use_column_width=True)
+            st.image(img, caption="PRÉVIA DA ASSINATURA", use_column_width=True)
             
             # Preparar Download
             buf = io.BytesIO()
             img.save(buf, format="PNG")
             st.download_button(
-                label="💾 BAIXAR ASSINATURA AGORA",
+                label="💾 BAIXAR ASSINATURA",
                 data=buf.getvalue(),
                 file_name=f"Assinatura_{nome.replace(' ', '_')}.png",
                 mime="image/png"
@@ -115,4 +115,4 @@ if st.button("GERAR ASSINATURA"):
         st.warning("⚠️ Preencha Nome, Cargo e E-mail.")
 
 st.markdown("---")
-st.caption("© 2026 Fireng Engenharia de Incêndio")
+st.caption("© 2026 FIRENG ENGENHARIA DE INCÊNDIO")

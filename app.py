@@ -34,15 +34,19 @@ Y_CONTATOS_INICIAL = 250
 ESPACAMENTO_LINHAS = 65     
 LARGURA_LINHA = 500        
 RECUO_TEXTO = 55            
-SITE_FIXO = "www.fireng.com.br"
+# Links para o site
+SITE_URL = "https://www.fireng.com.br"
+SITE_DISPLAY = "www.fireng.com.br"
 TEMPLATE_PATH = "template_limpo.png" 
 FONT_DIR = "fontes"
 
-# --- AJUSTE FINO DE ALINHAMENTO (ÍCONE vs TEXTO) ---
-# Se o texto ainda parecer desalinhado, altere este número (ex: 2, 4, 6 ou -2)
+# --- SEU AJUSTE MÁGICO DE ALINHAMENTO ---
 ADJUST_Y_TEXT = -6
 
 st.title("🔥 Gerador de Assinaturas")
+
+# LINK CLICÁVEL NO TOPO
+st.markdown(f"Acesse o site oficial: [{SITE_DISPLAY}]({SITE_URL})")
 st.subheader("Dados da Assinatura")
 
 # 2. CAMPOS DE ENTRADA
@@ -81,7 +85,7 @@ if st.button("GERAR"):
             icons_info = [
                 ('tel', telefone, Y_CONTATOS_INICIAL, 'telefone.png'),
                 ('email', email, Y_CONTATOS_INICIAL + ESPACAMENTO_LINHAS, 'cartinha.png'),
-                ('site', SITE_FIXO, Y_CONTATOS_INICIAL + (ESPACAMENTO_LINHAS * 2), 'mundo.png')
+                ('site', SITE_DISPLAY, Y_CONTATOS_INICIAL + (ESPACAMENTO_LINHAS * 2), 'mundo.png')
             ]
 
             for key, texto, y, icon_name in icons_info:
@@ -115,4 +119,5 @@ if st.button("GERAR"):
         st.warning("⚠️ Preencha Nome, Cargo e E-mail.")
 
 st.markdown("---")
-st.caption("© 2026 FIRENG ENGENHARIA DE INCÊNDIO")
+# LINK CLICÁVEL NO RODAPÉ
+st.markdown(f"© 2026 [FIRENG ENGENHARIA DE INCÊNDIO]({SITE_URL})")
